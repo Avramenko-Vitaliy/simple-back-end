@@ -10,8 +10,7 @@ node {
             }
 
             stage('Run tests and build docker') {
-                sh 'COMMIT_HASH=$(git rev-parse HEAD)'
-                sh 'mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=$COMMIT_HASH'
+                sh 'mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=$(git rev-parse HEAD)'
             }
 
         } catch (e) {
