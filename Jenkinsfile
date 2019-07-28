@@ -10,7 +10,7 @@ node {
             }
 
             stage('Run tests and build docker') {
-                sh 'cd simple-back && mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=$BUILD'
+                sh 'cd simple-back-end && mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=$BUILD'
             }
 
         } catch (e) {
