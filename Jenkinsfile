@@ -19,12 +19,7 @@ node {
 
                 //configure registry
                 docker.withRegistry('https://130114285352.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ead6e682-bbc4-4b71-8863-af5167d782a4') {
-
-                    //build image
-                    def customImage = docker.build('130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back:$(git rev-parse HEAD)')
-
-                    //push image
-                    customImage.push()
+                    docker.image('130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back:$(git rev-parse HEAD)').push()
                 }
             }
 
