@@ -10,8 +10,13 @@ node {
             }
 
             stage('Run tests and build docker') {
+                sh 'echo $PWD'
                 sh 'mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=$(git rev-parse HEAD)'
             }
+
+            // stage('Redeploy simple-back-end') {
+            //     sh ''
+            // }
 
         } catch (e) {
             sh 'exit 1'
