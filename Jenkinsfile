@@ -10,13 +10,23 @@ node {
             }
 
             stage('Run tests and build docker') {
-                sh 'echo $PWD'
                 sh 'mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=$(git rev-parse HEAD)'
             }
 
-            // stage('Redeploy simple-back-end') {
-            //     sh ''
-            // }
+            stage('Push simple-back-end image') {
+                sh 'rm  ~/.dockercfg || true'
+                sh 'rm ~/.docker/config.json || true'
+
+                //configure registry
+                docker.withRegistry('https://130114285352.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ead6e682-bbc4-4b71-8863-af5167d782a4') {
+
+                    //build image
+                    def customImage = docker.build("130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back:$(git rev-parse HEAD)")
+
+                    //push image
+                    customImage.push()
+                }
+            }
 
         } catch (e) {
             sh 'exit 1'
