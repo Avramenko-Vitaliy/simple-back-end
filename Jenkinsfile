@@ -23,6 +23,10 @@ node {
                 }
             }
 
+            stage('Clear images') {
+                sh 'docker rmi $(docker images -q)'
+            }
+
         } catch (e) {
             sh 'exit 1'
             currentBuild.result = "FAILED"
