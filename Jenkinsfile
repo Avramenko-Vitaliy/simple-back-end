@@ -16,7 +16,7 @@ node {
             stage('Push simple-back-end image') {
                 sh 'rm  ~/.dockercfg || true'
                 sh 'rm ~/.docker/config.json || true'
-                sh 'echo $(git rev-parse HEAD) > /simple-back'
+                sh 'echo $(git rev-parse HEAD) > ~/simple-back'
 
                 //configure registry
                 docker.withRegistry('https://130114285352.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ead6e682-bbc4-4b71-8863-af5167d782a4') {
@@ -34,7 +34,7 @@ node {
                        url: 'https://github.com/Avramenko-Vitaliy/itea-devops'
 
                 sh 'cd capstone/ecs'
-                sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=$(cat /simple-back)"'
+                sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=$(cat ~/simple-back)"'
             }
 
             stage('Clear images') {
