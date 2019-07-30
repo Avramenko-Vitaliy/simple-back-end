@@ -27,7 +27,7 @@ node {
             stage('Redeploy service') {
                 sh 'echo $PWD'
                 sh 'wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip'
-                sh 'sudo unzip terraform_0.11.14_linux_amd64.zip -d /usr/local/bin/'
+                sh 'unzip terraform_0.11.14_linux_amd64.zip'
                 sh 'rm terraform_0.11.14_linux_amd64.zip'
 
                 git branch: 'capstone',
