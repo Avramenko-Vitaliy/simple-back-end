@@ -25,16 +25,17 @@ node {
             }
 
             stage('Redeploy service') {
-                sh 'echo $PWD'
-                sh 'wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip'
-                sh 'unzip terraform_0.11.14_linux_amd64.zip'
-                sh 'rm terraform_0.11.14_linux_amd64.zip'
-
                 git branch: 'capstone',
                        url: 'https://github.com/Avramenko-Vitaliy/itea-devops'
 
-                sh 'cd capstone/ecs'
-                sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=$(cat ../../simple-back)"'
+                withCredentials([usernamePassword(credentialsId: 'ead6e682-bbc4-4b71-8863-af5167d782a4', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh 'echo $AWS_ACCESS_KEY_ID'
+                    sh 'echo $AWS_SECRET_ACCESS_KEY'
+
+                    sh 'cd capstone/service'
+                    sh 'terraform init'
+                    sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=$(cat ../../simple-back)" -var="aws_access_key_id=${$AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${$AWS_SECRET_ACCESS_KEY}"'
+                }
             }
 
             stage('Clear images') {
