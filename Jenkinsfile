@@ -8,6 +8,7 @@ node {
                 git branch: 'master',
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
 
+                sh 'echo $(git rev-parse HEAD)'
                 HASH_COMMIT = sh (
                     script: 'git rev-parse HEAD',
                     returnStdout: true
