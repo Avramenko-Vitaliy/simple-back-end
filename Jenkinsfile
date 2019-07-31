@@ -3,12 +3,16 @@ node {
         try {
             deleteDir() // Clean the workspace
             notifyBuild()
+
+            environment{
+               HASH_COMMIT = ''
+            }
             stage('Checkout') {
                 git branch: 'master',
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
 
-                HASH_COMMIT = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                sh 'echo ${HASH_COMMIT}'
+                env.HASH_COMMIT = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                sh 'echo ${env.HASH_COMMIT}'
             }
 
             stage('Run tests and build docker') {
