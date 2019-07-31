@@ -38,8 +38,8 @@ node {
                     sh 'echo $PWD'
                     sh 'echo $(ls -l)'
                     sh 'terraform init -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
-                    sh 'terraform validate -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
-                    sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
+                    sh 'terraform validate -var="ecr_back_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
+                    sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_back_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
                   }
                 }
             }
