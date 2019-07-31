@@ -30,19 +30,22 @@ node {
 
             stage('Redeploy service') {
                 sh 'cd ../'
+
+                // sh 'wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip'
+                // sh 'unzip terraform_0.11.14_linux_amd64.zip'
+                // def tfHome = sh(script: 'echo $PWD', returnStdout: true).trim()
+                // env.PATH = '${tfHome}:${env.PATH}'
+
+                sh 'echo terraform --version'
+
                 git branch: 'capstone',
                        url: 'https://github.com/Avramenko-Vitaliy/itea-devops'
 
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'ead6e682-bbc4-4b71-8863-af5167d782a4', variable: 'AWS_ACCESS_KEY_ID']]) {
                     sh 'cd capstone/service'
-
-                    sh 'wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip'
-                    sh 'unzip terraform_0.11.14_linux_amd64.zip'
-                    sh 'echo $($PWD/terraform --version)'
-
-                    sh '$PWD/terraform init -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
-                    sh '$PWD/terraform validate -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
-                    sh '$PWD/terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
+                    sh 'terraform init -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
+                    sh 'terraform validate -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
+                    sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
                 }
             }
 
