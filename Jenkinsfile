@@ -29,10 +29,12 @@ node {
             }
 
             stage('Redeploy service') {
-                wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip
-                unzip terraform_0.11.14_linux_amd64.zip
+                sh 'wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip'
+                sh 'unzip terraform_0.11.14_linux_amd64.zip'
+
                 def tfHome = sh(script: '$PWD', returnStdout: true).trim()
                 env.PATH = '${tfHome}:${env.PATH}'
+
                 sh 'echo terraform --version'
 
                 git branch: 'capstone',
