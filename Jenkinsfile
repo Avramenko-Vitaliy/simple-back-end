@@ -29,14 +29,12 @@ node {
             }
 
             stage('Redeploy service') {
-                sh 'cd ../'
                 sh 'terraform --version'
-
                 git branch: 'capstone',
                        url: 'https://github.com/Avramenko-Vitaliy/itea-devops'
 
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'ead6e682-bbc4-4b71-8863-af5167d782a4', variable: 'AWS_ACCESS_KEY_ID']]) {
-                    sh 'cd capstone/service'
+                    cd capstone/service
                     sh 'echo $PWD'
                     sh 'echo $(ls -la)'
                     sh 'terraform init -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
