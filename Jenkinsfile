@@ -36,7 +36,7 @@ node {
                 // def tfHome = sh(script: 'echo $PWD', returnStdout: true).trim()
                 // env.PATH = '${tfHome}:${env.PATH}'
 
-                sh 'echo /usr/local/bin/terraform --version'
+                sh 'echo $(/usr/local/bin/terraform --version)'
 
                 git branch: 'capstone',
                        url: 'https://github.com/Avramenko-Vitaliy/itea-devops'
