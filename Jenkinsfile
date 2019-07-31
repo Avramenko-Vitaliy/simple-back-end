@@ -8,12 +8,7 @@ node {
                 git branch: 'master',
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
 
-                echo sh (script: 'git rev-parse HEAD', returnStdout: true).trim()
-                HASH_COMMIT = sh (
-                    script: 'git rev-parse HEAD',
-                    returnStdout: true
-                ).trim()
-                sh 'echo ${HASH_COMMIT}'
+                echo sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
             }
 
             stage('Run tests and build docker') {
