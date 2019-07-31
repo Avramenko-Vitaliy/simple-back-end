@@ -6,6 +6,7 @@ node {
 
             environment{
                HASH_COMMIT = ''
+               PATH = '/user/local/bin'
             }
             stage('Checkout') {
                 git branch: 'master',
@@ -30,13 +31,7 @@ node {
 
             stage('Redeploy service') {
                 sh 'cd ../'
-
-                // sh 'wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip'
-                // sh 'unzip terraform_0.11.14_linux_amd64.zip'
-                // def tfHome = sh(script: 'echo $PWD', returnStdout: true).trim()
-                // env.PATH = '${tfHome}:${env.PATH}'
-
-                sh 'echo $(/usr/local/bin/terraform --version)'
+                sh 'echo $(terraform --version)'
 
                 git branch: 'capstone',
                        url: 'https://github.com/Avramenko-Vitaliy/itea-devops'
