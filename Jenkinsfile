@@ -7,6 +7,13 @@ node {
             stage('Checkout') {
                 git branch: 'master',
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
+
+                GIT_COMMIT_EMAIL = sh (
+                    script: 'git --no-pager show -s --format=\'%ae\'',
+                    returnStdout: true
+                ).trim()
+                echo "Git committer email: ${GIT_COMMIT_EMAIL}"
+
                 HASH_COMMIT = echo $(git rev-parse HEAD)
                 sh 'echo ${HASH_COMMIT}'
             }
