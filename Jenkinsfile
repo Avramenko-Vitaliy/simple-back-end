@@ -7,7 +7,7 @@ node {
             stage('Checkout') {
                 git branch: 'master',
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
-                HASH_COMMIT=$(git rev-parse HEAD)
+                HASH_COMMIT='$(git rev-parse HEAD)'
                 sh 'echo ${HASH_COMMIT}'
             }
 
