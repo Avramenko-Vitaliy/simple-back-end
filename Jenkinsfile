@@ -1,26 +1,27 @@
 node {
     timeout(20){
         try {
+            def HASH_COMMIT
             deleteDir() // Clean the workspace
             notifyBuild()
             stage('Checkout') {
                 git branch: 'master',
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
-
+                HASH_COMMIT=$(git rev-parse HEAD)
+                sh 'echo ${HASH_COMMIT}'
             }
 
             stage('Run tests and build docker') {
-                sh 'mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=$(git rev-parse HEAD)'
+                sh 'mvn clean install -Pdocker -Ddocker.image.name=130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back -Ddocker.image.tag=${HASH_COMMIT}'
             }
 
             stage('Push simple-back-end image') {
                 sh 'rm  ~/.dockercfg || true'
                 sh 'rm ~/.docker/config.json || true'
-                sh 'echo $(git rev-parse HEAD) > simple-back'
 
                 //configure registry
                 docker.withRegistry('https://130114285352.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ead6e682-bbc4-4b71-8863-af5167d782a4') {
-                    docker.image('130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back:$(git rev-parse HEAD)').push()
+                    docker.image('130114285352.dkr.ecr.us-east-1.amazonaws.com/simple-back:${HASH_COMMIT}').push()
                 }
             }
 
@@ -33,8 +34,8 @@ node {
                     sh "echo this is ${env.AWS_SECRET_ACCESS_KEY}"
 
                     sh 'cd capstone/service'
-                    sh 'terraform init -var="ecr_image_tag=$(cat ../../simple-back)" -var="aws_access_key_id=${env.AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${env.AWS_SECRET_ACCESS_KEY}"'
-                    sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=$(cat ../../simple-back)" -var="aws_access_key_id=${env.AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${env.AWS_SECRET_ACCESS_KEY}"'
+                    sh 'terraform init -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${env.AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${env.AWS_SECRET_ACCESS_KEY}"'
+                    sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${env.AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${env.AWS_SECRET_ACCESS_KEY}"'
                 }
             }
 
