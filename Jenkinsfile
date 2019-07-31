@@ -1,5 +1,8 @@
 def HASH_COMMIT
 node {
+   environment {
+     HASH_COMMIT
+   }
     timeout(20){
         try {
             deleteDir() // Clean the workspace
