@@ -1,14 +1,13 @@
 node {
     timeout(20){
         try {
-            def HASH_COMMIT
             deleteDir() // Clean the workspace
             notifyBuild()
             stage('Checkout') {
                 git branch: 'master',
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
-                HASH_COMMIT= sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-                sh 'echo ${HASH_COMMIT}'
+                HASH_COMMIT = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                sh 'echo ${currentBuild.displayName}'
             }
 
             stage('Run tests and build docker') {
