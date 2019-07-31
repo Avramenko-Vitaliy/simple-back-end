@@ -12,7 +12,7 @@ node {
                     url: 'https://github.com/Avramenko-Vitaliy/simple-back-end'
 
                 env.HASH_COMMIT = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                sh 'echo ${env.HASH_COMMIT}'
+                echo env.HASH_COMMIT
             }
 
             stage('Run tests and build docker') {
