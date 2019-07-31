@@ -36,8 +36,9 @@ node {
                        url: 'https://github.com/Avramenko-Vitaliy/itea-devops'
 
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'ead6e682-bbc4-4b71-8863-af5167d782a4', variable: 'AWS_ACCESS_KEY_ID']]) {
-                    sh 'echo $PWD'
                     sh 'cd capstone/service'
+                    sh 'echo $PWD'
+                    sh 'echo $(ls -la)'
                     sh 'terraform init -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
                     sh 'terraform validate -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
                     sh 'terraform apply -auto-approve -target=aws_ecs_service.ecs-service -var="ecr_image_tag=${HASH_COMMIT}" -var="aws_access_key_id=${AWS_ACCESS_KEY_ID}" -var="aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}"'
